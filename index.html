@@ -23,7 +23,7 @@
     }
 
     .text {
-      font-size: 200%;
+      font-size: 175%;
       color: #aaa;
       border: 1px solid transparent;
       display: inline-block;
@@ -71,7 +71,47 @@
       correctCounter++;
     }
 
+    function generateMessage(value) {
+      if (typeof value === 'string') {
+        return value.trim();
+      }
+
+      let msg = '';
+      for (let i = 0; i < value; i++) {
+        msg += randomText(allowASCII);
+      }
+      return msg.trim();
+    }
+
+    function resetWords() {
+      $('#words').empty();
+
+      const msg = 'usual salad has hug laugh rush us lurk radar rural shark skull sugar us ask dull dad flag harsh ' +
+        'address add reader skill did suffer all field ear free kiss ride aide died dealers lied alike darker area afraid all air duller user free idea ' +
+        'red fair hear her her life here has raise a hers here is read his rugs raised her rule as reared far as he red field her dreaded here all hard herself hair; ' +
+        'swear owe lower also allow row weak flower follow wear sure well road saw rear risker order soldiers worried awkward firewood afford ' +
+        'sheaf qualify already yellow we early why require year sir how liquid yard joy yield risk lady offer rough ready ' +
+        'two fall first soft white adapt thirty ought other post wealthy our totally tree teeth faith trailer rapidly slight fourth fast ';
+      message = generateMessage(msg);
+
+      // message = generateMessage(messageSize);
+
+      for (let i = 0; i < message.length; i++) {
+        let ch = message.charAt(i);
+        if (ch === ' ') {
+          ch = '&nbsp;';
+        }
+        $('#words').append(`<span class="text">${ch}</span>`);
+      }
+
+      updateCursor(cursorIndex);
+      for (let i = 0; i < cursorIndex; i++) {
+        updateVisited(i);
+      }
+    }
+
     const allowASCII = 'qwertyuiop asdfghjkl;';
+
     let messageSize = 1000;
     let message = '';
     let cursorIndex = 0;
@@ -80,25 +120,14 @@
     let incorrectCounter = 0;
 
     $(document).ready(function () {
-      for (let i = 0; i < messageSize; i++) {
-        let ch = randomText(allowASCII);
-        message += ch;
-        if (ch === ' ') {
-          ch = '&nbsp;';
-        }
-        $('#words').append(`<span class="text">${ch}</span>`);
-      }
-      updateCursor(cursorIndex);
-      for (let i = 0; i < cursorIndex; i++) {
-        updateVisited(i);
-      }
+      resetWords();
     })
+
+    // $(document).keydown(function (event) {
+    // event.preventDefault();
+    // })
 
     $(document).keydown(function (event) {
-      event.preventDefault();
-    })
-
-    $(document).keyup(function (event) {
       const key = event.key;
       if (key !== message[cursorIndex]) {
         isMistake = true;
@@ -110,6 +139,10 @@
       updateVisited(cursorIndex, isMistake);
       processCount(isMistake);
       isMistake = false;
+
+      if (cursorIndex === 0) {
+        resetWords();
+      }
     });
   </script>
 </body>
