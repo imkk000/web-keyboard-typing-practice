@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyboard Practice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <style>
+    html,
+    body {
+      font-family: 'Roboto Mono', monospace;
+      margin: 0;
+      padding: 0;
+    }
+
+    #words {
+      width: 80%;
+      margin: 20px auto;
+    }
+
+    .text {
+      font-size: 200%;
+      color: #aaa;
+      border: 1px solid transparent;
+      display: inline-block;
+    }
+
+    .text.selected {
+      border: 1px solid #000;
+    }
+
+    .text.visited {
+      color: #000;
+    }
+
+    .text.incorrect {
+      color: #f00;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="words">
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script>
+    function randomText(allowASCII) {
+      const index = Math.floor(Math.random() * allowASCII.length);
+      return allowASCII.charAt(index);
+    }
+
+    function updateCursor(i) {
+      $('span.text').eq(i - 1).removeClass('selected');
+      $('span.text').eq(i).addClass('selected');
+    }
+
+    function updateVisited(i, isMistake) {
+      const className = isMistake ? 'incorrect' : 'visited';
+      $('span.text').eq(i - 1).addClass(className);
+    }
+
+    function processCount(isMistake) {
+      if (isMistake) {
+        incorrectCounter++;
+        return;
+      }
+      correctCounter++;
+    }
+
+    const allowASCII = 'qwertyuiop asdfghjkl;';
+    let messageSize = 1000;
+    let message = '';
+    let cursorIndex = 0;
+    let isMistake = false;
+    let correctCounter = 0;
+    let incorrectCounter = 0;
+
+    $(document).ready(function () {
+      for (let i = 0; i < messageSize; i++) {
+        let ch = randomText(allowASCII);
+        message += ch;
+        if (ch === ' ') {
+          ch = '&nbsp;';
+        }
+        $('#words').append(`<span class="text">${ch}</span>`);
+      }
+      updateCursor(cursorIndex);
+      for (let i = 0; i < cursorIndex; i++) {
+        updateVisited(i);
+      }
+    })
+
+    $(document).keydown(function (event) {
+      event.preventDefault();
+    })
+
+    $(document).keyup(function (event) {
+      const key = event.key;
+      if (key !== message[cursorIndex]) {
+        isMistake = true;
+        return;
+      }
+
+      cursorIndex = (cursorIndex + 1) % message.length;
+      updateCursor(cursorIndex);
+      updateVisited(cursorIndex, isMistake);
+      processCount(isMistake);
+      isMistake = false;
+    });
+  </script>
+</body>
+
+</html>
