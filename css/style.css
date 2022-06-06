@@ -3,17 +3,17 @@ body {
     font-family: 'Roboto Mono', monospace;
     margin: 0;
     padding: 0;
+    background-color: #000;
 }
 
 #words {
-    width: 75%;
+    width: 80%;
     margin: 20px auto;
-    text-align: justify;
 }
 
 .word {
-    font-size: 250%;
-    color: #aaa;
+    font-size: 270%;
+    color: rgb(216, 216, 216);
     display: inline-block;
 }
 
@@ -22,13 +22,13 @@ body {
 }
 
 .character.selected {
-    border: 1px solid #000;
+    border: 1px solid #fff;
 }
 
 .character.visited {
-    color: #000;
+    color: #ff0;
 }
 
 .character.incorrect {
-    color: #f00;
+    color: rgb(255, 94, 73);
 }

@@ -16,6 +16,8 @@
   <div id="words"></div>
   <script src="js/jquery-3.6.0.min.js"></script>
   <script>
+    const allowASCII = 'asdfghjklqwertyuiop';
+
     let dicts = [];
     let message = '';
     let cursorIndex = 0;
@@ -23,25 +25,25 @@
     let correctCounter = 0;
     let incorrectCounter = 0;
 
-    function updateCursor(i) {
+    const updateCursor = i => {
       $('span.character').eq(i - 1).removeClass('selected');
       $('span.character').eq(i).addClass('selected');
     }
 
-    function updateVisited(i, isMistake) {
+    const updateVisited = (i, isMistake) => {
       const className = isMistake ? 'incorrect' : 'visited';
       $('span.character').eq(i - 1).addClass(className);
     }
 
-    function processCount(isMistake) {
+    const processCount = (isMistake) => {
       if (isMistake) {
         incorrectCounter++;
-        return;
+      } else {
+        correctCounter++;
       }
-      correctCounter++;
     }
 
-    function generateNumber(number) {
+    const generateNumber = (number) => {
       let spaceCounter = 0;
       let msg = '';
       let ch = '';
@@ -62,7 +64,7 @@
       return msg.trim().split(' ');
     }
 
-    function generateObject(value) {
+    const generateObject = (value) => {
       const wordSize = Math.floor(Math.random() * 50) + 50;
       let words = [];
       for (let i = 0; i < wordSize; i++) {
@@ -72,11 +74,11 @@
       return words;
     }
 
-    function generateString(value) {
+    const generateString = (value) => {
       return value.trim().split(' ');
     }
 
-    function generateWords(value) {
+    const generateWords = (value) => {
       if (typeof value === 'number') {
         return generateNumber(value);
       }
@@ -86,8 +88,8 @@
       return generateString(value);
     }
 
-    function displayWords(words) {
-      words.forEach(function (word, index) {
+    const displayWords = (words) => {
+      words.forEach((word, index) => {
         const wordElm = $('<div>').addClass('word');
         for (let i = 0; i < word.length; i++) {
           wordElm.append($('<span>').addClass('character').html(word.charAt(i)));
@@ -102,23 +104,20 @@
       });
     }
 
-    async function resetWords() {
+    const resetWords = async () => {
+      if (dicts.length == 0) {
+        const regex = new RegExp(`^[${allowASCII}]+$`);
+        const getDicts = await $.getJSON('json/words.json');
+        // filter words
+        dicts = getDicts.filter(word => regex.test(word))
+      }
+
       $('#words').empty();
       message = '';
       cursorIndex = 0;
       isMistake = false;
       correctCounter = 0;
       incorrectCounter = 0;
-
-      if (dicts.length == 0) {
-        const allowASCII = 'asdfghjklqwertyuiop';
-        const regex = new RegExp(`^[${allowASCII}]+$`);
-        const getDicts = await $.getJSON('json/words.json');
-        dicts = getDicts.filter(function (word) {
-          // filter words
-          return regex.test(word);
-        })
-      }
 
       const words = generateWords(dicts);
       message = words.join(' ');
@@ -129,12 +128,16 @@
       }
     }
 
-    $(document).ready(function () {
+    $(document).ready(() => {
       resetWords();
     })
 
-    $(document).keydown(function (event) {
+    $(document).keydown(event => {
       const key = event.key;
+      if (allowASCII.indexOf(key) < 0 && key !== ' ') {
+        return;
+      }
+
       if (key !== message[cursorIndex]) {
         isMistake = true;
         return;
