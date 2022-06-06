@@ -4,6 +4,8 @@ let dicts = [];
 let message = '';
 let cursorIndex = 0;
 let isMistake = false;
+let comboCounter = 0;
+let comboTimeout;
 
 const updateCursor = i => {
     $('span.character').eq(i - 1).removeClass('selected');
@@ -78,10 +80,16 @@ const displayWords = (words) => {
 
 const displayStats = () => {
     $('#word-count').text(`${cursorIndex+1}/${message.length}`);
+    $('#combo-count').text(comboCounter);
 }
 
 const displayDashboard = () => {
     displayStats();
+}
+
+const resetCombo = () => {
+    comboCounter = 0;
+    displayDashboard();
 }
 
 const resetWords = async () => {
@@ -96,6 +104,9 @@ const resetWords = async () => {
     message = '';
     cursorIndex = 0;
     isMistake = false;
+    if (comboCounter == 0) {
+        comboCounter = 0;
+    }
 
     const words = generateWords(dicts);
     message = words.join(' ');
@@ -119,9 +130,13 @@ $(document).keydown(event => {
 
     if (key !== message[cursorIndex]) {
         isMistake = true;
-        displayDashboard();
+        resetCombo();
         return;
     }
+
+    // combo
+    clearTimeout(comboTimeout);
+    comboTimeout = setTimeout(resetCombo, 1500);
 
     cursorIndex = (cursorIndex + 1) % message.length;
     if (cursorIndex === 0) {
@@ -129,6 +144,7 @@ $(document).keydown(event => {
         return;
     }
 
+    comboCounter++;
     updateCursor(cursorIndex);
     updateVisited(cursorIndex, isMistake);
     displayDashboard();

@@ -6,8 +6,13 @@ body {
     background-color: #000;
 }
 
+body {
+    width: 85%;
+    margin: 0 auto;
+}
+
 #words {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     margin-top: 25px;
 }
@@ -36,12 +41,21 @@ body {
 
 #dashboard {
     width: 100%;
-    height: 50px;
+    height: 35px;
     background-color: #fff;
+    margin: 0 auto;
     text-align: center;
 }
 
-#stats {
-    font-size: 200%;
-    margin: auto;
+#word-count {
+    font-size: 150%;
+}
+
+#combo-count {
+    font-size: 3000%;
+    position: absolute;
+    color: #ff0;
+    opacity: 0.3;
+    bottom: 0;
+    right: 20px;
 }
