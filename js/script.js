@@ -39,11 +39,16 @@ const generateNumber = (number) => {
 }
 
 const generateObject = (value) => {
-    const wordSize = Math.floor(Math.random() * 50) + 50;
+    const wordSize = Math.floor(Math.random() * 50) + 55;
     let words = [];
+    let randomized = [];
+    let index = 0;
     for (let i = 0; i < wordSize; i++) {
-        index = Math.floor(Math.random() * value.length);
+        do {
+            index = Math.floor(Math.random() * value.length);
+        } while (randomized.indexOf(value[index]) >= 0);
         words.push(value[index]);
+        randomized.push(value[index]);
     }
     return words;
 }
