@@ -9,48 +9,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
-  <style>
-    html,
-    body {
-      font-family: 'Roboto Mono', monospace;
-      margin: 0;
-      padding: 0;
-    }
-
-    #words {
-      width: 75%;
-      margin: 20px auto;
-      text-align: justify;
-    }
-
-    .word {
-      font-size: 250%;
-      color: #aaa;
-      display: inline-block;
-    }
-
-    .character {
-      border: 1px solid transparent;
-    }
-
-    .character.selected {
-      border: 1px solid #000;
-    }
-
-    .character.visited {
-      color: #000;
-    }
-
-    .character.incorrect {
-      color: #f00;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-  <div id="words">
-  </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <div id="words"></div>
+  <script src="js/jquery-3.6.0.min.js"></script>
   <script>
     let dicts = [];
     let message = '';

@@ -1,0 +1,34 @@
+html,
+body {
+    font-family: 'Roboto Mono', monospace;
+    margin: 0;
+    padding: 0;
+}
+
+#words {
+    width: 75%;
+    margin: 20px auto;
+    text-align: justify;
+}
+
+.word {
+    font-size: 250%;
+    color: #aaa;
+    display: inline-block;
+}
+
+.character {
+    border: 1px solid transparent;
+}
+
+.character.selected {
+    border: 1px solid #000;
+}
+
+.character.visited {
+    color: #000;
+}
+
+.character.incorrect {
+    color: #f00;
+}
