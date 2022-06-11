@@ -1,4 +1,4 @@
-const allowASCII = 'asdfghjklqwertyuiop';
+const allowASCII = 'asdfghjklqwertyuiopzxcvbnm';
 
 let dicts = [];
 let message = '';
